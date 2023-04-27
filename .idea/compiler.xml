@@ -2,13 +2,17 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auto-config-server" />
-        <module name="auto-server-discovery" />
+        <module name="auto-entity" />
         <module name="rent-car-app" />
+        <module name="auto-user" />
+        <module name="auto-rent" />
+        <module name="auto-server-discovery" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -18,7 +22,10 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auto-config-server" options="-parameters" />
+      <module name="auto-entity" options="-parameters" />
+      <module name="auto-rent" options="-parameters" />
       <module name="auto-server-discovery" options="-parameters" />
+      <module name="auto-user" options="-parameters" />
       <module name="test" options="-parameters" />
     </option>
   </component>
