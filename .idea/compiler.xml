@@ -10,8 +10,9 @@
         <module name="auto-config-server" />
         <module name="auto-entity" />
         <module name="rent-car-app" />
-        <module name="auto-user" />
         <module name="auto-rent" />
+        <module name="auto-user" />
+        <module name="auto-rent-user" />
         <module name="auto-server-discovery" />
       </profile>
     </annotationProcessing>
@@ -24,6 +25,7 @@
       <module name="auto-config-server" options="-parameters" />
       <module name="auto-entity" options="-parameters" />
       <module name="auto-rent" options="-parameters" />
+      <module name="auto-rent-user" options="-parameters" />
       <module name="auto-server-discovery" options="-parameters" />
       <module name="auto-user" options="-parameters" />
       <module name="test" options="-parameters" />
