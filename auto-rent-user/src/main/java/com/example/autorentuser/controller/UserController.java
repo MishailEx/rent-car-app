@@ -1,7 +1,7 @@
 package com.example.autorentuser.controller;
 
 import com.example.autoentity.model.User;
-import com.example.autouser.service.UserService;
+import com.example.autorentuser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

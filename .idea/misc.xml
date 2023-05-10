@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/auto-rent/pom.xml" />
         <option value="$PROJECT_DIR$/auto-user/auto-rent-user/pom.xml" />
         <option value="$PROJECT_DIR$/auto-rent-user/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-announcement/pom.xml" />
+        <option value="$PROJECT_DIR$/front-car/pom.xml" />
       </list>
     </option>
   </component>

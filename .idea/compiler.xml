@@ -11,24 +11,32 @@
         <module name="auto-entity" />
         <module name="rent-car-app" />
         <module name="auto-rent" />
-        <module name="auto-user" />
+        <module name="auto-announcement" />
         <module name="auto-rent-user" />
         <module name="auto-server-discovery" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auto-test" target="17" />
+      <module name="auto-user" target="17" />
+      <module name="front-car" target="17" />
       <module name="test" target="17" />
+      <module name="test2" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auto-announcement" options="-parameters" />
       <module name="auto-config-server" options="-parameters" />
       <module name="auto-entity" options="-parameters" />
       <module name="auto-rent" options="-parameters" />
       <module name="auto-rent-user" options="-parameters" />
       <module name="auto-server-discovery" options="-parameters" />
+      <module name="auto-test" options="-parameters" />
       <module name="auto-user" options="-parameters" />
+      <module name="front-car" options="-parameters" />
       <module name="test" options="-parameters" />
+      <module name="test2" options="-parameters" />
     </option>
   </component>
 </project>
