@@ -15,7 +15,9 @@ public class User {
     @Id
     private String uuid;
 
-    private String name;
+    private String role;
+
+    private String username;
 
     private String password;
 
@@ -23,4 +25,9 @@ public class User {
 
     private String phone;
 
+    public User(String role, String username, String password) {
+        this.role = role;
+        this.username = username;
+        this.password = password;
+    }
 }

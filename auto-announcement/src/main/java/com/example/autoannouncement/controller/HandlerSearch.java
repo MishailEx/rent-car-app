@@ -42,6 +42,17 @@ public class HandlerSearch {
         });
     }
 
+    public Mono<ServerResponse> findAutoForAddAnn(ServerRequest serverRequest) {
+        Mono<Auto> autoMono = serverRequest.bodyToMono(Auto.class);
+
+        return autoMono.flatMap(rsl -> {
+            return  ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(searchService.findByAutoForAddAnn(rsl), Auto.class)
+                    .switchIfEmpty(notFound);
+        });
+    }
+
     public Mono<ServerResponse> findAllCategory(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .body(searchService.findAllCat(serverRequest), Category.class)

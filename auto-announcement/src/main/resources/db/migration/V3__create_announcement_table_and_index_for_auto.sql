@@ -3,8 +3,10 @@ CREATE TABLE announcement (
                               name VARCHAR(200) NOT NULL,
                               price INTEGER NOT NULL,
                               description VARCHAR(500) NOT NULL,
-                              uuid VARCHAR(50)NOT NULL,
-                              auto_id INTEGER
+                              user_uuid VARCHAR(50) NOT NULL,
+                              auto_id INTEGER,
+                              chat_id INTEGER[],
+                              image_id VARCHAR(200)[]
 );
 
 CREATE INDEX announcement_auto_id_idx ON announcement (auto_id);

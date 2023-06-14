@@ -8,17 +8,24 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auto-config-server" />
+        <module name="auto-gateway" />
         <module name="auto-entity" />
         <module name="rent-car-app" />
-        <module name="auto-rent" />
+        <module name="email-service" />
         <module name="auto-announcement" />
-        <module name="auto-rent-user" />
+        <module name="auto-image-service" />
         <module name="auto-server-discovery" />
+        <module name="auto-chat-service" />
+        <module name="auto-user-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auto-rent" target="17" />
+      <module name="auto-rent-user" target="17" />
       <module name="auto-test" target="17" />
       <module name="auto-user" target="17" />
+      <module name="bff" target="17" />
+      <module name="bff-test" target="17" />
       <module name="front-car" target="17" />
       <module name="test" target="17" />
       <module name="test2" target="17" />
@@ -27,13 +34,20 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auto-announcement" options="-parameters" />
+      <module name="auto-chat-service" options="-parameters" />
       <module name="auto-config-server" options="-parameters" />
       <module name="auto-entity" options="-parameters" />
+      <module name="auto-gateway" options="-parameters" />
+      <module name="auto-image-service" options="-parameters" />
       <module name="auto-rent" options="-parameters" />
       <module name="auto-rent-user" options="-parameters" />
       <module name="auto-server-discovery" options="-parameters" />
       <module name="auto-test" options="-parameters" />
       <module name="auto-user" options="-parameters" />
+      <module name="auto-user-service" options="-parameters" />
+      <module name="bff" options="-parameters" />
+      <module name="bff-test" options="-parameters" />
+      <module name="email-service" options="-parameters" />
       <module name="front-car" options="-parameters" />
       <module name="test" options="-parameters" />
       <module name="test2" options="-parameters" />

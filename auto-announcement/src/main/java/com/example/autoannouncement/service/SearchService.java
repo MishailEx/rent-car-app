@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class SearchService {
@@ -46,6 +47,11 @@ public class SearchService {
     public Flux<Auto> findByAuto(Auto rsl) {
         return autoRepository.findAllByCategoryIdAndMarkIdAndModelIdAndYear(rsl.getCategoryId(),
                 rsl.getMarkId(), rsl.getModelId(), rsl.getCarYear());
+    }
+
+    public Mono<Auto> findByAutoForAddAnn(Auto rsl) {
+        return autoRepository.findByCategoryIdAndMarkIdAndModelIdAndCarYear(rsl.getCategoryId(),
+                rsl.getMarkId(), rsl.getModelId(), rsl.getCarYear()).switchIfEmpty(autoRepository.save(rsl));
     }
 
     public Flux<Announcement> findAllByAnnByAuto(Long cat, Long mark, Long model, Integer year, Integer priceFrom, Integer priceTo) {

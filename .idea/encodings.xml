@@ -3,18 +3,27 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/auto-announcement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-announcement/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-chat-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-chat-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-config-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-config-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-entity/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-entity/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-image-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-image-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-rent-user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-rent-user/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-rent/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-server-discovery/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-server-discovery/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auto-user-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auto-user/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bff-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bff/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/email-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/front-car/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />

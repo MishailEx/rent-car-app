@@ -5,6 +5,7 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface AutoRepository extends ReactiveCrudRepository<Auto, Long> {
 
@@ -15,4 +16,6 @@ public interface AutoRepository extends ReactiveCrudRepository<Auto, Long> {
                                                           @Param("markId") Long markId,
                                                           @Param("modelId") Long modelId,
                                                           @Param("carYear") Integer year);
+
+    Mono<Auto> findByCategoryIdAndMarkIdAndModelIdAndCarYear(Long catId, Long markId, Long modelId, Integer year);
 }

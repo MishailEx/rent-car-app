@@ -10,11 +10,15 @@
         <option value="$PROJECT_DIR$/auto-server-discovery/pom.xml" />
         <option value="$PROJECT_DIR$/auto-entity/pom.xml" />
         <option value="$PROJECT_DIR$/auto-user/pom.xml" />
-        <option value="$PROJECT_DIR$/auto-rent/pom.xml" />
         <option value="$PROJECT_DIR$/auto-user/auto-rent-user/pom.xml" />
-        <option value="$PROJECT_DIR$/auto-rent-user/pom.xml" />
         <option value="$PROJECT_DIR$/auto-announcement/pom.xml" />
         <option value="$PROJECT_DIR$/front-car/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-announcement/auto-image-service/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-image-service/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-user-service/pom.xml" />
+        <option value="$PROJECT_DIR$/email-service/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-chat-service/pom.xml" />
+        <option value="$PROJECT_DIR$/auto-gateway/pom.xml" />
       </list>
     </option>
   </component>

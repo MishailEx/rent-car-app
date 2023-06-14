@@ -41,6 +41,7 @@ public class Routers {
                         nest(accept(MediaType.APPLICATION_JSON),
                                 route(GET("/model"), handlerSearch::findModelByCatAndMark)
                                         .andRoute(POST("/auto"), handlerSearch::findAuto)
+                                        .andRoute(POST("/autoForAddAnn"), handlerSearch::findAutoForAddAnn)
                                         .andRoute(GET("/category"), handlerSearch::findAllCategory)
                                         .andRoute(GET("/mark"), handlerSearch::findAllMark)
                                         .andRoute(POST("/ann"), handlerSearch::findAnnByAuto)));
