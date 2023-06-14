@@ -83,7 +83,7 @@ export default {
       this.socket = new WebSocket("ws://localhost:8632/ws?" + userUUID);
       this.socket.onmessage = this.handleMessage;
 
-      axios.post('http://localhost:8632/getChatsByUser', {uuid: this.$store.state.user.uuid})
+      axios.post('http://localhost:8765/auto-chat/getChatsByUser', {uuid: this.$store.state.user.uuid})
           .then(rsl => {
             if (rsl.data !== null) {
               this.chats = rsl.data
@@ -94,11 +94,10 @@ export default {
           });
     },
     loadPreviousMessages() {
-      const baseUrl = 'http://localhost:8632';
       if (this.$route.query.recUUID) {
         this.uuids.uuidRecipient = this.$route.query.recUUID;
       }
-      axios.post(baseUrl + '/findChat', this.uuids).then(rsl => {
+      axios.post('http://localhost:8765/findChat', this.uuids).then(rsl => {
         if (rsl.data !== '') {
           this.selectedChat = rsl.data
           this.getMessagesFromChat();
@@ -106,7 +105,7 @@ export default {
       })
     },
     getMessagesFromChat() {
-      axios.post('http://localhost:8632/getChat', { chatId: this.selectedChat.id }).then(chat => {
+      axios.post('http://localhost:8765/auto-chat/getChat', { chatId: this.selectedChat.id }).then(chat => {
         this.selectedChat.messages = this.selectedChat.messages.concat(chat.data);
       });
     },
@@ -173,7 +172,7 @@ export default {
         uuidRecipient: this.uuids.uuidRecipient,
         name: this.$route.query.name
       }
-      return axios.post('http://localhost:8632/createChat', data)
+      return axios.post('http://localhost:8765/auto-chat/createChat', data)
           .then(response => {
             this.selectedChat = response.data;
             this.chats.push(response.data)

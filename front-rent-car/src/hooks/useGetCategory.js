@@ -6,7 +6,7 @@ export function useGetCategory() {
 
     const fetching = async () => {
         try {
-            const response = await axios.get('http://localhost:8525/api/search/category');
+            const response = await axios.get('http://localhost:8765/auto-ann/api/search/category');
             categories.value = response.data;
         } catch (e) {
             alert(e)

@@ -9,9 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
@@ -29,29 +26,29 @@ public class SecurityConfig {
         this.securityContextRepository = securityContextRepository;
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        return exchange -> {
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.addAllowedMethod("GET");
-            corsConfiguration.addAllowedMethod("POST");
-            corsConfiguration.addAllowedHeader("Authorization");
-            corsConfiguration.addAllowedHeader("Content-Type");
-            corsConfiguration.setAllowCredentials(true);
-
-            source.registerCorsConfiguration("/**", corsConfiguration);
-            return corsConfiguration;
-        };
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        return exchange -> {
+////            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//            CorsConfiguration corsConfiguration = new CorsConfiguration();
+//            corsConfiguration.addAllowedMethod("*");
+////            corsConfiguration.addAllowedMethod("POST");
+//            corsConfiguration.addAllowedHeader("*");
+////            corsConfiguration.addAllowedHeader("Content-Type");
+//            corsConfiguration.setAllowCredentials(true);
+//
+////            source.registerCorsConfiguration("/**", corsConfiguration);
+//            return corsConfiguration;
+//        };
+//    }
 
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 
         return http
-                .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(corsSpec -> corsSpec.disable())
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(authenticationManager)

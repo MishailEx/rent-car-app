@@ -6,7 +6,7 @@ export function useGetAnnId(id) {
 
     const fetching = async () => {
         try {
-            const response = await axios.get('http://localhost:8525/api/ann/' + id);
+            const response = await axios.get('http://localhost:8765/auto-ann/api/ann/' + id);
             announcement.value = response.data;
         } catch (e) {
             alert(e)

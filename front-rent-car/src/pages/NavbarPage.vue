@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     logout() {
-      api.post('http://localhost:8652/logout')
+      api.post('http://localhost:8765/auto-user-service/logout')
           .then(rsl => {
             if (rsl.status === 200) {
               this.$store.commit("user/setToken", '')

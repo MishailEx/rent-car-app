@@ -28,6 +28,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -133,115 +134,34 @@ public class HandlersAnn {
                             .body(BodyInserters.fromMultipartData(buildFormData(parts, ann.getId())))
                             .retrieve()
                             .bodyToMono(new ParameterizedTypeReference<Map<String, List<String>>>() {})
+                            .onErrorResume(throwable -> {
+                                String errorMessage = "Не удалось загрузить картинки. Пожалуйста, попробуйте еще раз.";
+                                return Mono.just(Collections.singletonMap("error", Collections.singletonList(errorMessage)));
+                            })
                             .flatMap(resp -> {
-                                if (resp != null) {
+                                if (resp != null && !resp.containsKey("error")) {
                                     List<String> respUrls = resp.get("urls");
                                     List<String> images = ann.getImages();
                                     images.addAll(respUrls);
                                     ann.setImages(images);
                                     return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
                                 }
-                                return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
+                                String errorMessage = resp.get("error").get(0);
+                                System.out.println(errorMessage);
+                                return ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(Collections.singletonMap("error", errorMessage));
                             });
-
-//                    return imagesMono.flatMap(resp -> {
-//                        if (resp != null) {
-//                                    List<String> images = ann.getImages();
-//                                    images.addAll(resp);
-//                                    ann.setImages(images);
-//                                    return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
-//                                }
-//                                return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
-//                    });
-
-//                    return imageFlux.collectList().flatMap(resp -> {
-//                        if (!resp.isEmpty()) {
-//                            ann.getImages().addAll(resp);
-//                            return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
-//                        }
-//                        return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
-//                    });
-
-//                return announcementMono.flatMap(ann -> {
-//                    MultiValueMap<String, HttpEntity<?>> body = new LinkedMultiValueMap<>();
-//                    body.add("image", new HttpEntity<>(parts));
-//                    body.add("announcementId", new HttpEntity<>(ann.getId()));
-//
-//                    return webClient.post()
-//                            .uri("http://localhost:8235/add")
-//                            .contentType(MediaType.MULTIPART_FORM_DATA)
-//                            .body(BodyInserters.fromMultipartData(body))
-//                            .retrieve()
-//                            .bodyToMono(new ParameterizedTypeReference<List<String>>() {
-//                            })
-//                            .flatMap(resp -> {
-//                                if (resp != null) {
-//                                    List<String> images = ann.getImages();
-//                                    images.addAll(resp);
-//                                    ann.setImages(images);
-//                                    return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
-//                                }
-//                                return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
-//                            });
                 });
             });
         });
+    }
 
-//        Mono<MultiValueMap<String, Part>> multiValueMapMono = serverRequest.multipartData();
-//        Mono<Announcement> dataMono = serverRequest.bodyToMono(Announcement.class);
-//
-//        return Mono.zip(multiValueMapMono, dataMono)
-//                .flatMap(tuple -> {
-//                    MultiValueMap<String, Part> multiValueMap = tuple.getT1();
-//                    Announcement data = tuple.getT2();
-//
-//                    // Обработка файлов картинок
-//                    List<Part> images = multiValueMap.get("images");
-//                    for (Part image : images) {
-//                        // Действия с файлами картинок
-//                    }
-//
-//                    // Обработка строчных данных
-//                    Long autoId = data.getAutoId();
-//                    Integer price = data.getPrice();
-//                    String description = data.getDescription();
-//                    String userUUID = data.getUserUUID();
-//
-//                    // Другие действия с данными
-//
-//                    return ServerResponse.ok().build();
-//                });
-//        Mono<MultiValueMap<String, Part>> multiValueMapMono = serverRequest.multipartData();
-//        return multiValueMapMono.flatMap(file -> {
-//
-//            HashMap<String, List<Part>> annPart = new HashMap<>();
-//            annPart.put("images", file.get("images[]"));
-//            annPart.put("autoId", file.get("autoId"));
-//            annPart.put("price", file.get("price"));
-//            annPart.put("description", file.get("description"));
-//            annPart.put("userUUID", file.get("userUUID"));
-//
-//            List<Part> autoIdParts = annPart.get("autoId");
-//
-//            String autoId1 = annPart.get("autoId").stream().findFirst().get().name();
-//            String autoId2 = annPart.get("autoId").stream().findFirst().get().content().toString();
-//            String autoId3 = annPart.get("autoId").stream().findFirst().get().headers().toString();
-//
-////            annService.save(ann)
-//
-////            for (Part part : parts) {
-////                String fileName = " - " + part.headers().getContentDisposition().getFilename();
-////
-////                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-////                DataBufferUtils.write(part.content(), outputStream)
-////                        .doOnComplete(() -> {
-////                            byte[] data = outputStream.toByteArray();
-////                        }).subscribe();
-////            }
-//            return ServerResponse.ok().build();
-//        });
-//        System.out.println(objectMono);
-//
+    public Mono<ServerResponse> fallback(Throwable throwable) {
+        String errorMessage = "Не удалось загрузить картинки. Пожалуйста, попробуйте еще раз.";
+        return ServerResponse.status(HttpStatus.OK)
+                .contentType(MediaType.TEXT_PLAIN)
+                .bodyValue(errorMessage);
     }
 
     public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
@@ -252,7 +172,6 @@ public class HandlersAnn {
     }
 
     public Mono<ServerResponse> findById(ServerRequest serverRequest) {
-//        UUID id = UUID.fromString(serverRequest.pathVariable("id"));
         long id = Long.parseLong(serverRequest.pathVariable("id"));
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -261,7 +180,6 @@ public class HandlersAnn {
     }
 
     public Mono<ServerResponse> update(ServerRequest serverRequest) {
-//        UUID id = UUID.fromString(serverRequest.pathVariable("id"));
         long id = Long.parseLong(serverRequest.pathVariable("id"));
         Mono<Announcement> announcementMono = serverRequest.bodyToMono(Announcement.class);
         return announcementMono.flatMap(ann ->
@@ -278,33 +196,4 @@ public class HandlersAnn {
                 .build(annService.delete(id))
                 .switchIfEmpty(notFound);
     }
-
-//    public Mono<ServerResponse> imageAdd(ServerRequest request) {
-//        Mono<MultiValueMap<String, Part>> multiValueMapMono = request.multipartData();
-//        return multiValueMapMono.flatMap(map -> {
-//            List<Part> files = map.get("images[]");
-//            File folder = new File("D:/test");
-//            if (!folder.exists()) {
-//                folder.mkdirs();
-//            }
-//
-//            List<String> fileNames = new ArrayList<>();
-//            for (Part part : files) {
-//                String fileName = part.headers().getContentDisposition().getFilename();
-//                Path destPath = Paths.get(folder.getPath(), fileName);
-//                try {
-//                    Files.write(destPath, part.content().reduce(DataBuffer::write).block().asByteBuffer().array());
-//                    fileNames.add(fileName);
-//                } catch (IOException e) {
-//                    return Mono.error(e);
-//                } finally {
-//                    if (part instanceof NettyDataBuffer) {
-//                        ((NettyDataBuffer) part).release();
-//                    }
-//                }
-//
-//            }
-//            return ServerResponse.ok().bodyValue(fileNames);
-//        });
-//    }
 }

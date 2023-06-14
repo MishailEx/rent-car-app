@@ -127,15 +127,15 @@ export default {
     },
     loadModels: function () {
       if (this.selectedCategory && !this.selectedMark) {
-        axios.get('http://localhost:8525/api/search/model?categoryId=' + this.selectedCategory).then(response => {
+        axios.get('http://localhost:8765/auto-ann/api/search/model?categoryId=' + this.selectedCategory).then(response => {
           this.models = response.data;
         });
       } else if (!this.selectedCategory && this.selectedMark) {
-        axios.get('http://localhost:8525/api/search/model?markId=' + this.selectedMark).then(response => {
+        axios.get('http://localhost:8765/auto-ann/api/search/model?markId=' + this.selectedMark).then(response => {
           this.models = response.data;
         });
       } else if (this.selectedCategory && this.selectedMark) {
-        axios.get('http://localhost:8525/api/search/model?categoryId=' + this.selectedCategory + '&markId=' + this.selectedMark).then(response => {
+        axios.get('http://localhost:8765/auto-ann/api/search/model?categoryId=' + this.selectedCategory + '&markId=' + this.selectedMark).then(response => {
           this.models = response.data;
         });
       } else {
@@ -167,14 +167,23 @@ export default {
         modelId: this.selectedModel,
         carYear: this.selectedYear
       };
-      axios.post('http://localhost:8525/api/search/autoForAddAnn', auto).then(resp => {
+      axios.post('http://localhost:8765/auto-ann/api/search/autoForAddAnn', auto).then(resp => {
 
         formData.append("autoId", resp.data.id);
         formData.append("price", this.price);
         formData.append("description", this.description);
         formData.append("userUUID", this.$store.state.user.uuid);
 
-        axios.post('http://localhost:8525/api/ann/add', formData);
+        axios.post('http://localhost:8765/auto-ann/api/ann/add', formData).then(response => {
+          console.log(response.data);
+        })
+            .catch(error => {
+              if (error.response && error.response.data && error.response.data.error) {
+                console.log(error.response.data.error);
+              } else {
+                console.log("Произошла ошибка при выполнении запроса");
+              }
+            });
       });
 
       setTimeout(() => {

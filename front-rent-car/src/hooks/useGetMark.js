@@ -6,7 +6,7 @@ export function useGetMark() {
 
     const fetching = async () => {
         try {
-            const response = await axios.get('http://localhost:8525/api/search/mark');
+            const response = await axios.get('http://localhost:8765/auto-ann/api/search/mark');
             marks.value = response.data;
         } catch (e) {
             alert(e)

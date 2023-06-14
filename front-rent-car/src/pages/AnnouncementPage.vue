@@ -63,7 +63,7 @@ export default {
         price.value = announcement.value.price;
         uuid.value = announcement.value.userUUID;
         if (store.state.user.uuid === announcement.value.userUUID) {
-          axios.post('http://localhost:8632/getChatsByUser', { uuid: store.state.user.uuid }).then(rsl => {
+          axios.post('http://localhost:8765/auto-chat/getChatsByUser', { uuid: store.state.user.uuid }).then(rsl => {
             if (rsl.data !== null) {
               chat.value = rsl.data
             }
