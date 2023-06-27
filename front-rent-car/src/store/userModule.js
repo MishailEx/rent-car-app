@@ -7,8 +7,8 @@ export const userModule = {
         uuid: '',
         token: '',
         sortOptions: [
-            {value: 'model', name: 'модель'},
-            {value: 'price', name: 'цена'}
+            {value: 'model', name: 'Модель'},
+            {value: 'price', name: 'Цена'}
         ]
     }),
     mutations: {

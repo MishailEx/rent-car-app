@@ -4,6 +4,7 @@
       <select-custom
           v-model="selectedSort"
           :options="sortOptions"
+          @change="handleSortChange"
       />
     </div>
     <my-dialog v-model:show="dialogVisible">
@@ -29,6 +30,11 @@ import {mapState} from "vuex";
 
 export default {
   components: {SelectCustom, AnnList},
+  data() {
+    return {
+      selectedSort: null
+    }
+  },
   setup(props) {
     const {announcements, isPostsLoading, fetching} = useAnnouncements();
 
@@ -50,7 +56,7 @@ export default {
     removeAnn(ann) {
       axios.delete('http://localhost:8765/auto-ann/api/ann/delete/' + ann.id).then(rsl => {
         if (Math.floor(rsl.status / 100) === 2) {
-          this.fetching();
+          this.fetching(this.selectedSort, null);
         } else {
           console.log(rsl.status);
         }
@@ -58,6 +64,14 @@ export default {
           .catch(error => {
             console.log(error);
           });
+    },
+    handleSortChange() {
+      if (this.selectedSort === "Модель") {
+        console.log(this.announcements)
+        this.fetching("model", null);
+      } else if (this.selectedSort === "Цена") {
+        this.fetching("price", null);
+      }
     }
   },
 
