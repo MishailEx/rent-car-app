@@ -5,10 +5,17 @@ export function useAnnouncements() {
     const announcements = ref([])
     const isPostsLoading = ref(true)
 
-    const fetching = async () => {
+    const fetching = async (param = null) => {
         try {
             const response = await axios.get('http://localhost:8765/auto-ann/api/ann/all');
-            announcements.value = response.data;
+
+            if (param === "model") {
+                announcements.value = [...announcements.value].sort((a, b) => a.name.localeCompare(b.name));
+            } else if (param === "price") {
+                announcements.value = [...announcements.value].sort((a, b) => b.price - a.price);
+            } else {
+                announcements.value = response.data;
+            }
         } catch (e) {
             alert(e)
         } finally {

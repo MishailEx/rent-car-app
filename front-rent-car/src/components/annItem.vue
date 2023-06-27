@@ -127,15 +127,32 @@ export default {
 }
 
 .image-container {
-  margin: 0 10px;
-
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
 }
 
 .image {
-  max-width: 200px;
-  max-height: 200px;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
+
+/*.image-gallery {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.image-container {*/
+/*  margin: 0 10px;*/
+
+/*}*/
+
+/*.image {*/
+/*  max-width: 200px;*/
+/*  max-height: 200px;*/
+/*  object-fit: cover;*/
+/*}*/
 
 .ann {
   display: flex;

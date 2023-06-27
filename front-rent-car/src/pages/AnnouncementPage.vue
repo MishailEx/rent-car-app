@@ -14,7 +14,7 @@
       <div v-if="announcement.images && announcement.images.length > 0" class="image-container">
         <div v-for="(image, index) in announcement.images" :key="index" class="image-wrapper">
           <img :src="getImageUrl(image)" alt="Image" class="image"/>
-          <div class="image-overlay"></div>
+          <div class="image-overlay" @click="openImageInPopup(image)"></div>
         </div>
       </div>
 
@@ -105,7 +105,15 @@ export default {
       const bucketName = "car-rent";
 
       return `${minioUrl}/${bucketName}/${imageName}`;
-    }
+    },
+    openImageInPopup(image) {
+      const imageUrl = this.getImageUrl(image);
+      const width = 800;
+      const height = 600
+      const left = (window.innerWidth - width) / 2;
+      const top = (window.innerHeight - height) / 2;
+      window.open(imageUrl, '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+    },
   }
 }
 </script>
