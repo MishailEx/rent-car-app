@@ -1,12 +1,11 @@
 package com.example.autoannouncement.controller;
 
 
-import com.example.autoannouncement.repository.AutoRepository;
-import com.example.autoannouncement.repository.CategoryRepository;
 import com.example.autoannouncement.service.AnnService;
 import com.example.autoentity.model.Announcement;
-import com.example.autoentity.model.Category;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -34,22 +33,13 @@ import java.util.Map;
 
 @Component
 public class HandlersAnn {
-
-    private AnnService annService;
-    private AutoRepository autoRepository;
-
-    private CategoryRepository categoryRepository;
-    private Mono<ServerResponse> notFound = ServerResponse.notFound().build();
+    private Logger logger = LoggerFactory.getLogger(HandlersAnn.class);
+    private final AnnService annService;
+    private final Mono<ServerResponse> notFound = ServerResponse.notFound().build();
 
     @Autowired
-    public HandlersAnn(AnnService annService, AutoRepository autoRepository, CategoryRepository categoryRepository) {
+    public HandlersAnn(AnnService annService) {
         this.annService = annService;
-        this.autoRepository = autoRepository;
-        this.categoryRepository = categoryRepository;
-    }
-
-    public Mono<ServerResponse> findByIdCat(ServerRequest serverRequest) {
-        return ServerResponse.ok().body(categoryRepository.findById(1L), Category.class);
     }
 
     public Mono<String> getStringFromMultipartData(Part part) {
@@ -60,13 +50,6 @@ public class HandlersAnn {
                     String result = new String(data, StandardCharsets.UTF_8);
                     return Mono.just(result);
                 }));
-//              for (Part part : parts) {
-////                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-////                DataBufferUtils.write(part.content(), outputStream)
-////                        .doOnComplete(() -> {
-////                            byte[] data = outputStream.toByteArray();
-////                        }).subscribe();
-////            }
     }
 
     private MultiValueMap<String, Part> buildFormData(List<Part> parts, long id) {
@@ -120,48 +103,33 @@ public class HandlersAnn {
                 String t3 = tuple.getT3();
                 String t4 = tuple.getT4();
                 Mono<Announcement> announcementMono = annService.save(new Announcement(Long.parseLong(t1), Integer.parseInt(t2), t3, t4));
-
-
-                return announcementMono.flatMap(ann -> {
-
-                    MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
-                    formData.add("id", "4");
-                    formData.add("images[]", parts);
-
-                    return webClient.post()
-                            .uri("http://localhost:8235/add")
-                            .contentType(MediaType.MULTIPART_FORM_DATA)
-                            .body(BodyInserters.fromMultipartData(buildFormData(parts, ann.getId())))
-                            .retrieve()
-                            .bodyToMono(new ParameterizedTypeReference<Map<String, List<String>>>() {})
-                            .onErrorResume(throwable -> {
-                                String errorMessage = "Не удалось загрузить картинки. Пожалуйста, попробуйте еще раз.";
-                                return Mono.just(Collections.singletonMap("error", Collections.singletonList(errorMessage)));
-                            })
-                            .flatMap(resp -> {
-                                if (resp != null && !resp.containsKey("error")) {
-                                    List<String> respUrls = resp.get("urls");
-                                    List<String> images = ann.getImages();
-                                    images.addAll(respUrls);
-                                    ann.setImages(images);
-                                    return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
-                                }
-                                String errorMessage = resp.get("error").get(0);
-                                System.out.println(errorMessage);
-                                return ServerResponse.status(HttpStatus.BAD_REQUEST)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .bodyValue(Collections.singletonMap("error", errorMessage));
-                            });
-                });
+                logger.info("Пользователь - {}, добавил объявление с параметрами({},{},{})", t4, t1, t2, t3);
+                return announcementMono.flatMap(ann -> webClient.post()
+                        .uri("http://localhost:8235/add")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .body(BodyInserters.fromMultipartData(buildFormData(parts, ann.getId())))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<Map<String, List<String>>>() {})
+                        .onErrorResume(throwable -> {
+                            String errorMessage = "Не удалось загрузить картинки. Пожалуйста, попробуйте еще раз.";
+                            return Mono.just(Collections.singletonMap("error", Collections.singletonList(errorMessage)));
+                        })
+                        .flatMap(resp -> {
+                            if (resp != null && !resp.containsKey("error")) {
+                                List<String> respUrls = resp.get("urls");
+                                List<String> images = ann.getImages();
+                                images.addAll(respUrls);
+                                ann.setImages(images);
+                                return annService.save(ann).flatMap(rsl -> ServerResponse.ok().build());
+                            }
+                            String errorMessage = resp.get("error").get(0);
+                            System.out.println(errorMessage);
+                            return ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .bodyValue(Collections.singletonMap("error", errorMessage));
+                        }));
             });
         });
-    }
-
-    public Mono<ServerResponse> fallback(Throwable throwable) {
-        String errorMessage = "Не удалось загрузить картинки. Пожалуйста, попробуйте еще раз.";
-        return ServerResponse.status(HttpStatus.OK)
-                .contentType(MediaType.TEXT_PLAIN)
-                .bodyValue(errorMessage);
     }
 
     public Mono<ServerResponse> findAll(ServerRequest serverRequest) {
@@ -185,7 +153,13 @@ public class HandlersAnn {
         return announcementMono.flatMap(ann ->
                         ServerResponse
                                 .status(HttpStatus.CREATED)
-                                .body(annService.update(ann, id), Announcement.class))
+                                .body(annService.update(ann, id), Announcement.class)
+                                .doOnNext(updateAnn -> {
+                                    logger.info("объявление id - {} j, обновлено с параметрами: {}", id, ann);
+                                })
+                                .doOnError(error -> {
+                                    logger.error("ошибка в объявлении id - {} j, не обновлено с параметрами: {}", id, ann);
+                                }))
                 .switchIfEmpty(notFound);
 
     }
@@ -193,7 +167,13 @@ public class HandlersAnn {
     public Mono<ServerResponse> delete(ServerRequest serverRequest) {
         long id = Long.parseLong(serverRequest.pathVariable("id"));
         return ServerResponse.status(HttpStatus.NO_CONTENT)
-                .build(annService.delete(id))
+                .build(annService.delete(id)
+                        .doOnSuccess(updateAnn -> {
+                            logger.info("объявление с id - {} удаленно", id);
+                        })
+                        .doOnError(error -> {
+                            logger.error("не удалось удалить объявление с id - {}", id);
+                        }))
                 .switchIfEmpty(notFound);
     }
 }

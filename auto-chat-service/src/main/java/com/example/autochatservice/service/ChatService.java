@@ -6,6 +6,8 @@ import com.example.autochatservice.entity.ChatRoom;
 import com.example.autochatservice.repository.ChatMessageRepository;
 import com.example.autochatservice.repository.ChatRoomRepository;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -20,6 +22,8 @@ import java.util.function.Consumer;
 
 @Service
 public class ChatService {
+
+    private Logger logger = LoggerFactory.getLogger(ChatService.class);
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
 
@@ -40,10 +44,13 @@ public class ChatService {
 
         Optional<ChatRoom> chatRoom = chatRoomRepository.findBySenderIdAndRecipientIdOrSenderIdAndRecipientId(uuidSender, uuidRecipient);
         if (chatRoom.isEmpty()) {
-          return chatRoomRepository.save(new ChatRoom(name, uuidSender, uuidRecipient));
+            ChatRoom createdChat = chatRoomRepository.save(new ChatRoom(name, uuidSender, uuidRecipient));
+            logger.info("создание чата для пользователей: {} - {}", uuidRecipient, uuidSender);
+            return createdChat;
         }
         return chatRoom.get();
     }
+
     public Optional<ChatRoom> findChat(ChatRequest request) {
         return chatRoomRepository.findBySenderIdAndRecipientIdOrSenderIdAndRecipientId(request.uuid(), request.uuidRecipient());
     }

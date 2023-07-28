@@ -1,5 +1,7 @@
-import axios from "axios";
+
 import {ref} from 'vue';
+import api from "@/utils/axios";
+
 
 export function useAnnouncements() {
     const announcements = ref([])
@@ -7,7 +9,7 @@ export function useAnnouncements() {
 
     const fetching = async (param = null) => {
         try {
-            const response = await axios.get('http://localhost:8765/auto-ann/api/ann/all');
+            const response = await api.get('http://localhost:8765/auto-ann/api/ann/all');
 
             if (param === "model") {
                 announcements.value = [...announcements.value].sort((a, b) => a.name.localeCompare(b.name));

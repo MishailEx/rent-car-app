@@ -1,6 +1,6 @@
 <template>
   <div class="input-form">
-    <input :value="modelValue" @input="updateValue" class="input-form__input" type="text">
+    <input :value="modelValue" @input="updateValue" :type="inputType" class="input-form__input">
   </div>
 
 
@@ -10,7 +10,13 @@
 export default {
   name: 'my-input',
   props: {
-    modelValue: [String, String]
+    modelValue: [String, String],
+    type: String,
+  },
+  data() {
+    return {
+      inputType: this.type || "text"
+    }
   },
   methods: {
     updateValue(event) {

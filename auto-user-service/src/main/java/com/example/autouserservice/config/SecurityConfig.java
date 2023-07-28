@@ -1,6 +1,8 @@
 package com.example.autouserservice.config;
 
 import com.example.autouserservice.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableReactiveMethodSecurity
 @Configuration
 public class SecurityConfig {
+
+    private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final JwtUtils jwtTokenUtil;
     private AuthenticationManager authenticationManager;
@@ -54,12 +58,13 @@ public class SecurityConfig {
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange(authorizeExchangeSpec -> {
-                    authorizeExchangeSpec.pathMatchers("/", "/login", "/logout", "/register", "/favicon.ico").permitAll()
+                    authorizeExchangeSpec.pathMatchers("/", "/login", "/logout", "/register", "/favicon.ico", "/actuator/**").permitAll()
                             .anyExchange().authenticated();
                 })
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((exchange, authentication) -> {
+                            logger.info("user - {} - logout", authentication.getPrincipal().toString());
                             ServerHttpResponse response = exchange.getExchange().getResponse();
                             response.setStatusCode(HttpStatus.OK);
                             return response.setComplete();

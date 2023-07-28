@@ -2,16 +2,19 @@
   <div>
 
     <label class="input-label" for="username">Имя</label><br>
-    <my-input class="input-field" v-model="username" type="text" id="username" placeholder="Name"></my-input>
+    <my-input class="input-field" v-model="username" id="username" placeholder="Name"></my-input>
 
     <label class="input-label" for="email">Email</label><br>
-    <my-input class="input-field" v-model="email" type="text" id="email" placeholder="Email"></my-input>
+    <my-input class="input-field" v-model="email" id="email" placeholder="Email"></my-input>
 
     <label class="input-label" for="password">Пароль</label><br>
     <my-input class="input-field" v-model="password" type="password" id="password" placeholder="Password"></my-input>
     <div class="input-container">
       <label class="input-label" for="phone">Телефон</label><br>
-      <my-input class="input-field" v-model="phone" type="text" id="phone" placeholder="Phone"></my-input>
+      <my-input class="input-field" v-model="phone" id="phone" placeholder="Phone"></my-input>
+    </div>
+    <div v-if="errorMessage !== ''" style="color: red">
+      <p> {{ errorMessage }} </p>
     </div>
     <button-custom @click="reg">Регистрация</button-custom>
   </div>
@@ -31,6 +34,8 @@ export default {
       email: '',
       password: '',
       phone: '',
+      errorMessage: '',
+
     };
   },
   computed: {
@@ -55,7 +60,10 @@ export default {
             this.$router.push("/");
           })
           .catch(error => {
-            console.log(error)
+            if (error.response.status === 400) {
+              this.errorMessage = "Пользователь с таким email уже существует"
+            }
+
           });
     },
   },

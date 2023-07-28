@@ -1,7 +1,7 @@
 <template>
   <select class="select" @change="changeOptions" >
     <option value="">
-      Упорядочить...
+      Выберите из списка...
     </option>
     <option v-for="option in options"
             :key="option.id"

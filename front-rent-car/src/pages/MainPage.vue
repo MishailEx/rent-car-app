@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="app__btns">
+      <label for="sort-select" style="color: teal; margin-right: 20px">Сортировка</label>
       <select-custom
+          id="sort-select"
           v-model="selectedSort"
           :options="sortOptions"
           @change="handleSortChange"

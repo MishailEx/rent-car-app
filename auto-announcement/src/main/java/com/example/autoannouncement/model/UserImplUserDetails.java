@@ -1,4 +1,4 @@
-package com.example.autouserservice.model;
+package com.example.autoannouncement.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

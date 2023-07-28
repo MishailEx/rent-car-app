@@ -11,6 +11,9 @@
       <my-input v-model="password" id="password" type="password" class="input-field" placeholder="Введите пароль"/>
     </div>
   </div>
+  <div v-if="errorMessage !== ''">
+    <p style="color: red"> {{errorMessage}} </p>
+  </div>
 
   <button-custom @click="login">Войти</button-custom>
 </template>
@@ -28,6 +31,7 @@ export default {
     return {
       email: '',
       password: '',
+      errorMessage: ''
     };
   },
   computed: {
@@ -51,7 +55,9 @@ export default {
             this.$router.push("/");
           })
           .catch(error => {
-            console.log(error)
+            if (error.response.status === 400) {
+              this.errorMessage = "Неверный логи или пароль"
+            }
           });
     },
   },

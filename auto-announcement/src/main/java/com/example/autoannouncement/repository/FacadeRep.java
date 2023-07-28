@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Getter
-public class AdapterRep {
-
+public class FacadeRep {
     private CategoryRepository categoryRepository;
     private AnnRepository annRepository;
     private AutoRepository autoRepository;
@@ -15,7 +14,7 @@ public class AdapterRep {
     private ModelRepository modelRepository;
 
     @Autowired
-    public AdapterRep(CategoryRepository categoryRepository, AnnRepository annRepository, AutoRepository autoRepository, MarkRepository markRepository, ModelRepository modelRepository) {
+    public FacadeRep(CategoryRepository categoryRepository, AnnRepository annRepository, AutoRepository autoRepository, MarkRepository markRepository, ModelRepository modelRepository) {
         this.categoryRepository = categoryRepository;
         this.annRepository = annRepository;
         this.autoRepository = autoRepository;

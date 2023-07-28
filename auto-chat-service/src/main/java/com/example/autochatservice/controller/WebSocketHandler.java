@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
 
-
     private final MessageActions messageActions;
-
 
     private final WebSocketManager webSocketManager;
 
@@ -32,7 +30,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         webSocketManager.addUser(uuid, session);
     }
 
-
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage messageChat) throws Exception {
         String receivedMessage = messageChat.getPayload();
@@ -44,9 +41,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String name = jsonObject.getString("name");
         LocalDateTime now = LocalDateTime.now();
 
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-//        String dateTime = LocalDateTime.now().format(formatter);
-
         ChatMessage chatMessage = new ChatMessage(message, now, name, chatId);
 
         JSONObject jsonMessage = new JSONObject(chatMessage);
@@ -54,15 +48,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         webSocketManager.sendMessage(uuid, jsonMessage.toString());
         webSocketManager.sendMessage(uuidRecipient, jsonMessage.toString());
 
-//        session.sendMessage(new TextMessage(jsonMessage.toString()));
-
         messageActions.sendMessage(jsonMessage.toString());
-
-
-        // Отправить новое сообщение всем подключенным клиентам
-//        for (WebSocketSession client : session.getOpenSessions()) {
-//            client.sendMessage(new TextMessage(receivedMessage));
-//        }
     }
 
     @Override
@@ -70,20 +56,4 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String uuid = session.getUri().getQuery();
         webSocketManager.removeUser(uuid);
     }
-
-//    @EventListener
-//    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-//        WebSocketSession session = (WebSocketSession) event.getSource();
-//        // Получить идентификатор пользователя из сессии
-//        String userId = ""; // Здесь должно быть получено значение идентификатора пользователя
-//        webSocketManager.addUser(userId, session);
-//    }
-//
-//    @EventListener
-//    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-//        WebSocketSession session = (WebSocketSession) event.getSource();
-//        // Получить идентификатор пользователя из сессии
-//        String userId = ""; // Здесь должно быть получено значение идентификатора пользователя
-//        webSocketManager.removeUser(userId);
-//    }
 }

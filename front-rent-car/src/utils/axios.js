@@ -10,7 +10,7 @@ const api = axios.create({
 // Перехватчик запросов перед отправкой
 api.interceptors.request.use(
     (config) => {
-        const token = store.state.user.token;
+        const token = store.getters["user/getToken"];
 
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;

@@ -25,19 +25,3 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(new WebSocketHandler(messageActions, webSocketManager), "/ws").setAllowedOrigins("*");
     }
 }
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.enableSimpleBroker("/queue");
-//        registry.setApplicationDestinationPrefixes("/app");
-//    }
-//
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/chat").withSockJS();
-//    }
-//
-//    @Override
-//    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-//        registration.setMessageSizeLimit(1024 * 1024);
-//    }
-//}
